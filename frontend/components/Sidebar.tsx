@@ -21,15 +21,16 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
       
       {/* Sidebar */}
       <aside className={`
-        fixed lg:sticky top-16 right-0 lg:right-auto
-        w-80 lg:w-full h-[calc(100vh-4rem)] lg:h-auto
-        bg-white border-l lg:border-l-0 lg:border-r border-gray-200
-        transform transition-transform duration-300 ease-in-out z-50
+        fixed top-16 right-0
+        w-80 lg:w-[calc(30%-22px)] h-[calc(100vh-4rem)] lg:h-[calc(100vh-8rem)]
+        bg-white border-l lg:border border-gray-200
+        transform transition-transform duration-300 ease-in-out z-40 lg:z-auto
         ${isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
-        overflow-hidden
+        overflow-y-auto lg:overflow-hidden lg:flex lg:items-center lg:justify-center
+        lg:mr-[26px] lg:mt-[26px] lg:mb-[26px] lg:rounded-lg
       `}>
-        <div className="h-full flex flex-col">
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="h-full w-full lg:max-w-sm lg:mx-auto flex flex-col">
+          <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6">
             {/* Filter Section */}
             <FilterSection />
 
@@ -69,13 +70,6 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                   <span className="font-medium">23</span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Ad Space - Fixed at bottom */}
-          <div className="p-6 pt-0">
-            <div className="bg-gray-100 rounded-lg p-4 text-center">
-              <p className="text-sm text-gray-500">Ad space / Info</p>
             </div>
           </div>
         </div>

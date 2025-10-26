@@ -71,9 +71,9 @@ export default function Home() {
         connected={connected}
       />
       
-      <div className="max-w-7xl mx-auto flex">
+      <div className="max-w-8xl mx-auto flex">
         {/* Main Feed */}
-        <main className="flex-1 lg:max-w-none lg:w-[60%] xl:w-[65%] px-4 sm:px-6 lg:px-8 py-6">
+        <main className="flex-1 lg:max-w-none lg:w-[65%] xl:w-[70%] px-4 sm:px-6 lg:px-8 py-6">
 
           {/* Poll Form Modal */}
           {showPollForm && (
@@ -115,7 +115,7 @@ export default function Home() {
         </main>
 
         {/* Sidebar */}
-        <div className="hidden lg:block lg:w-[40%] xl:w-[35%]">
+        <div className="hidden lg:block lg:w-[30%] xl:w-[30%]">
           <Sidebar />
         </div>
       </div>
