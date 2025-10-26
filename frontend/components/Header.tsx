@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Search, Plus, Menu } from 'lucide-react'
 import { api } from '@/lib/api'
+import { config } from '@/lib/config'
 
 interface HeaderProps {
   onNewPoll: () => void
@@ -16,6 +17,8 @@ export default function Header({ onNewPoll, onToggleSidebar, onSearch, connected
   const [connectionCount, setConnectionCount] = useState(0)
 
   useEffect(() => {
+    console.log('🔧 Header - API Config:', config.apiUrl)
+    
     const fetchConnections = async () => {
       try {
         const data = await api.getConnections()

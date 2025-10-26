@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Comment } from '@/lib/api'
+import { config } from '@/lib/config'
 
 interface WebSocketMessage {
   type: string
@@ -36,9 +37,8 @@ export const useWebSocket = (onMessage: (data: WebSocketMessage) => void) => {
     // Create WebSocket only if it doesn't exist or is closed
     if (!ws || ws.readyState === WebSocket.CLOSED) {
       console.log('🟢 Creating new WebSocket connection')
-      // Use environment variable for WebSocket URL
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const wsUrl = apiUrl.replace('http', 'ws') + '/ws'
+      const wsUrl = config.wsUrl
+      console.log('🔗 WebSocket URL:', wsUrl)
       ws = new WebSocket(wsUrl)
       
       ws.onopen = () => {
