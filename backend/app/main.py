@@ -2,16 +2,14 @@ import os
 from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+
 from app.database import init_db
 from app.routers import polls, websocket
 from app.websocket import manager
 
 app = FastAPI(title="QuickPoll API", version="1.0.0")
 
-# Force HTTPS in production
-if os.getenv("RAILWAY_ENVIRONMENT_NAME") == "production":
-    app.add_middleware(HTTPSRedirectMiddleware)
+# Railway handles HTTPS termination - no redirect needed
 
 # Production-ready CORS settings
 allowed_origins = [
