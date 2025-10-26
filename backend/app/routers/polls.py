@@ -285,10 +285,12 @@ async def vote(vote_data: Vote):
 async def like_poll(like_data: Like):
     conn = await get_db()
     
-    await conn.execute(
-        "UPDATE polls SET likes = likes + 1 WHERE id = $1",
-        like_data.poll_id
-    )
+    if like_data.is_liked:
+        # Add like
+        await conn.execute("UPDATE polls SET likes = likes + 1 WHERE id = $1", like_data.poll_id)
+    else:
+        # Remove like
+        await conn.execute("UPDATE polls SET likes = GREATEST(likes - 1, 0) WHERE id = $1", like_data.poll_id)
     
     likes = await conn.fetchval("SELECT likes FROM polls WHERE id = $1", like_data.poll_id)
     await conn.close()
@@ -299,7 +301,7 @@ async def like_poll(like_data: Like):
         "likes": likes
     }))
     
-    return {"success": True}
+    return {"success": True, "likes": likes}
 
 @router.post("/comment")
 async def add_comment(comment_data: Comment):
@@ -332,10 +334,12 @@ async def add_comment(comment_data: Comment):
 async def like_comment(like_data: CommentLike):
     conn = await get_db()
     
-    await conn.execute(
-        "UPDATE comments SET likes = likes + 1 WHERE id = $1",
-        like_data.comment_id
-    )
+    if like_data.is_liked:
+        # Add like
+        await conn.execute("UPDATE comments SET likes = likes + 1 WHERE id = $1", like_data.comment_id)
+    else:
+        # Remove like
+        await conn.execute("UPDATE comments SET likes = GREATEST(likes - 1, 0) WHERE id = $1", like_data.comment_id)
     
     comment = await conn.fetchrow(
         "SELECT id, poll_id, likes FROM comments WHERE id = $1",

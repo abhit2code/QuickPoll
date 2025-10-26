@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Poll, api } from '@/lib/api'
-import { Users, MessageCircle, Heart } from 'lucide-react'
+import { Users, MessageCircle } from 'lucide-react'
 import Comments from './Comments'
 
 interface PollCardProps {
@@ -14,6 +14,13 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [hasVoted, setHasVoted] = useState(false)
   const [showComments, setShowComments] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
+
+  useEffect(() => {
+    // Check if user has liked this poll (using localStorage)
+    const likedPolls = JSON.parse(localStorage.getItem('likedPolls') || '[]')
+    setIsLiked(likedPolls.includes(poll.id))
+  }, [poll.id])
 
   const totalVotes = poll.votes.reduce((sum, votes) => sum + votes, 0)
 
@@ -31,12 +38,37 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
 
   const handleLike = async () => {
     try {
-      await api.likePoll(poll.id)
+      const newLikedState = !isLiked
+      await api.likePoll(poll.id, newLikedState)
+      
+      // Update localStorage
+      const likedPolls = JSON.parse(localStorage.getItem('likedPolls') || '[]')
+      if (newLikedState) {
+        likedPolls.push(poll.id)
+      } else {
+        const index = likedPolls.indexOf(poll.id)
+        if (index > -1) likedPolls.splice(index, 1)
+      }
+      localStorage.setItem('likedPolls', JSON.stringify(likedPolls))
+      setIsLiked(newLikedState)
+      
       onUpdate()
     } catch (error) {
       console.error('Error liking poll:', error)
     }
   }
+
+  const HeartIcon = ({ filled }: { filled: boolean }) => (
+    <svg 
+      className={`w-4 h-4 ${filled ? 'text-red-500 fill-red-500' : 'text-red-500'}`}
+      fill={filled ? 'currentColor' : 'none'}
+      stroke="currentColor" 
+      strokeWidth="2" 
+      viewBox="0 0 24 24"
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  )
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
@@ -100,9 +132,11 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
 
           <button
             onClick={handleLike}
-            className="flex items-center space-x-1 hover:text-red-600"
+            className={`flex items-center space-x-1 transition-colors ${
+              isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
+            }`}
           >
-            <Heart className="w-4 h-4 text-red-500" />
+            <HeartIcon filled={isLiked} />
             <span>{poll.likes}</span>
           </button>
         </div>

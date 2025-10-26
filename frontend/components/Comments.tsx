@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Comment, api } from '@/lib/api'
 
 interface CommentsProps {
@@ -9,6 +9,13 @@ interface CommentsProps {
 
 export default function Comments({ pollId, comments, onUpdate }: CommentsProps) {
   const [newComment, setNewComment] = useState('')
+  const [likedComments, setLikedComments] = useState<number[]>([])
+
+  useEffect(() => {
+    // Load liked comments from localStorage
+    const liked = JSON.parse(localStorage.getItem('likedComments') || '[]')
+    setLikedComments(liked)
+  }, [])
 
   const addComment = async () => {
     if (!newComment.trim()) return
@@ -24,12 +31,38 @@ export default function Comments({ pollId, comments, onUpdate }: CommentsProps) 
 
   const likeComment = async (commentId: number) => {
     try {
-      await api.likeComment(commentId)
+      const isCurrentlyLiked = likedComments.includes(commentId)
+      const newLikedState = !isCurrentlyLiked
+      
+      await api.likeComment(commentId, newLikedState)
+      
+      // Update localStorage
+      let updatedLikes
+      if (newLikedState) {
+        updatedLikes = [...likedComments, commentId]
+      } else {
+        updatedLikes = likedComments.filter(id => id !== commentId)
+      }
+      
+      setLikedComments(updatedLikes)
+      localStorage.setItem('likedComments', JSON.stringify(updatedLikes))
     } catch (error) {
       console.error('Error liking comment:', error)
       setTimeout(onUpdate, 100)
     }
   }
+
+  const HeartIcon = ({ filled }: { filled: boolean }) => (
+    <svg 
+      className={`w-3 h-3 ${filled ? 'text-red-500 fill-red-500' : 'text-red-500'}`}
+      fill={filled ? 'currentColor' : 'none'}
+      stroke="currentColor" 
+      strokeWidth="2" 
+      viewBox="0 0 24 24"
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  )
 
   return (
     <div className="mt-4 border-t pt-4">
@@ -64,9 +97,12 @@ export default function Comments({ pollId, comments, onUpdate }: CommentsProps) 
               </span>
               <button
                 onClick={() => likeComment(comment.id)}
-                className="flex items-center gap-1 text-xs text-gray-600 hover:text-red-600"
+                className={`flex items-center gap-1 text-xs transition-colors ${
+                  likedComments.includes(comment.id) ? 'text-red-500' : 'text-gray-600 hover:text-red-500'
+                }`}
               >
-                ❤️ {comment.likes}
+                <HeartIcon filled={likedComments.includes(comment.id)} />
+                {comment.likes}
               </button>
             </div>
           </div>

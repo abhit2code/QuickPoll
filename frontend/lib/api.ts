@@ -91,11 +91,11 @@ export const api = {
     return response.json()
   },
 
-  async likePoll(pollId: number): Promise<{ success: boolean }> {
+  async likePoll(pollId: number, isLiked: boolean): Promise<{ success: boolean }> {
     const response = await fetch(`${API_BASE}/polls/like`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ poll_id: pollId })
+      body: JSON.stringify({ poll_id: pollId, is_liked: isLiked })
     })
     return response.json()
   },
@@ -109,11 +109,11 @@ export const api = {
     return response.json()
   },
 
-  async likeComment(commentId: number): Promise<{ success: boolean }> {
+  async likeComment(commentId: number, isLiked: boolean): Promise<{ success: boolean }> {
     const response = await fetch(`${API_BASE}/polls/comment/like`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ comment_id: commentId })
+      body: JSON.stringify({ comment_id: commentId, is_liked: isLiked })
     })
     return response.json()
   }

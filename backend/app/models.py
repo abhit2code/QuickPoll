@@ -11,6 +11,7 @@ class Vote(BaseModel):
 
 class Like(BaseModel):
     poll_id: int
+    is_liked: bool
 
 class Comment(BaseModel):
     poll_id: int
@@ -18,6 +19,7 @@ class Comment(BaseModel):
 
 class CommentLike(BaseModel):
     comment_id: int
+    is_liked: bool
 
 class Poll(BaseModel):
     id: int
