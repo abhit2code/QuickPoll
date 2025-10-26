@@ -1,18 +1,7 @@
 import { config } from './config'
 
 // Force HTTPS in production - aggressive fix
-const API_BASE = (() => {
-  let url = config.apiUrl
-  if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
-    url = url.replace('http://', 'https://')
-  }
-  // Double check - force HTTPS if we're on Vercel
-  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-    url = url.replace('http://', 'https://')
-  }
-  console.log('🔧 API_BASE final:', url)
-  return url
-})()
+const API_BASE = config.apiUrl;
 
 export interface Comment {
   id: number
@@ -68,11 +57,12 @@ export const api = {
     const url = `${API_BASE}/polls${searchParams.toString() ? '?' + searchParams.toString() : ''}`
     console.log('🔧 api.getPolls URL:', url)
     
-    // Force HTTPS one more time
-    const finalUrl = url.replace('http://', 'https://')
-    console.log('🔧 api.getPolls FINAL URL:', finalUrl)
-    
-    const response = await fetch(finalUrl)
+    const response = await fetch(url, {
+      cache: 'no-cache',
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    })
     return response.json()
   },
 
