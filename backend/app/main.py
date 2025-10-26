@@ -1,12 +1,21 @@
 import os
 from datetime import datetime
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from app.database import init_db
 from app.routers import polls, websocket
 from app.websocket import manager
 
 app = FastAPI(title="QuickPoll API", version="1.0.0")
+
+# Force HTTPS in production
+@app.middleware("http")
+async def force_https(request: Request, call_next):
+    if request.headers.get("x-forwarded-proto") == "http":
+        url = str(request.url).replace("http://", "https://", 1)
+        return RedirectResponse(url=url, status_code=301)
+    return await call_next(request)
 
 # Production-ready CORS settings
 allowed_origins = [
