@@ -1,14 +1,40 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { TrendingUp, BarChart3 } from 'lucide-react'
 import FilterSection from './FilterSection'
+import { api, TrendingData, StatsData } from '@/lib/api'
 
 interface SidebarProps {
   isOpen?: boolean
   onClose?: () => void
+  onFilterChange?: (filters: any) => void
 }
 
-export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
+export default function Sidebar({ isOpen = true, onClose, onFilterChange }: SidebarProps) {
+  const [trending, setTrending] = useState<TrendingData | null>(null)
+  const [stats, setStats] = useState<StatsData | null>(null)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [trendingData, statsData] = await Promise.all([
+          api.getTrending(),
+          api.getStats()
+        ])
+        setTrending(trendingData)
+        setStats(statsData)
+      } catch (error) {
+        console.error('Error fetching sidebar data:', error)
+      }
+    }
+
+    fetchData()
+    // Refresh data every 30 seconds
+    const interval = setInterval(fetchData, 30000)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <>
       {/* Mobile Overlay */}
@@ -32,7 +58,7 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
         <div className="h-full w-full lg:max-w-sm lg:mx-auto flex flex-col">
           <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6">
             {/* Filter Section */}
-            <FilterSection />
+            <FilterSection onFilterChange={onFilterChange} />
 
             {/* Trending Section */}
             <div className="bg-gray-50 rounded-lg p-4">
@@ -40,13 +66,31 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                 <TrendingUp className="w-5 h-5 text-orange-500" />
                 <h3 className="font-semibold text-gray-900">Trending</h3>
               </div>
-              <div className="space-y-2 text-sm text-gray-600">
-                <div className="flex items-center justify-between">
-                  <span>Most voted</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span>Most liked</span>
-                </div>
+              <div className="space-y-3 text-sm">
+                {trending ? (
+                  <>
+                    <div>
+                      <div className="font-medium text-gray-700 mb-1">Most Voted</div>
+                      {trending.most_voted.slice(0, 1).map((poll, index) => (
+                        <div key={poll.id} className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                          <span className="truncate flex-1 mr-2">{poll.title}</span>
+                          <span className="font-medium">{poll.total_votes}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-700 mb-1">Most Liked</div>
+                      {trending.most_liked.slice(0, 1).map((poll, index) => (
+                        <div key={poll.id} className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                          <span className="truncate flex-1 mr-2">{poll.title}</span>
+                          <span className="font-medium">{poll.likes}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-gray-500 text-xs">Loading trending...</div>
+                )}
               </div>
             </div>
 
@@ -57,18 +101,36 @@ export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
                 <h3 className="font-semibold text-gray-900">Quick Stats</h3>
               </div>
               <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Total Polls:</span>
-                  <span className="font-medium">156</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Active:</span>
-                  <span className="font-medium">89</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Your Votes:</span>
-                  <span className="font-medium">23</span>
-                </div>
+                {stats ? (
+                  <>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Total Polls:</span>
+                      <span className="font-medium">{stats.total_polls}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Active:</span>
+                      <span className="font-medium">{stats.active_polls}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Total Votes:</span>
+                      <span className="font-medium">{stats.total_votes}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Total Likes:</span>
+                      <span className="font-medium">{stats.total_likes}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Today Polls:</span>
+                      <span className="font-medium">{stats.polls_today}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Avg Votes:</span>
+                      <span className="font-medium">{stats.avg_votes_per_poll}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-gray-500 text-xs">Loading stats...</div>
+                )}
               </div>
             </div>
           </div>

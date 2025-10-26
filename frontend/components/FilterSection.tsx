@@ -29,6 +29,13 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
     onFilterChange?.(newFilters)
   }
 
+  const clearFilter = (category: string) => {
+    const defaults = { view: 'All Polls', timePeriod: 'All Time', sortBy: 'Newest First' }
+    const newFilters = { ...filters, [category]: defaults[category as keyof typeof defaults] }
+    setFilters(newFilters)
+    onFilterChange?.(newFilters)
+  }
+
   const clearAll = () => {
     const defaultFilters = {
       view: 'All Polls',
@@ -57,8 +64,18 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
 
       <div className="space-y-3">
         {/* VIEW */}
-        <div className="relative">
-          <label className="block text-xs font-medium text-gray-600 mb-1">VIEW</label>
+        {/* <div className="relative">
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-xs font-medium text-gray-600">VIEW</label>
+            {isFilterActive('view') && (
+              <button
+                onClick={() => clearFilter('view')}
+                className="text-xs text-blue-600 hover:text-blue-800"
+              >
+                Clear
+              </button>
+            )}
+          </div>
           <button
             onClick={() => setOpenDropdown(openDropdown === 'view' ? null : 'view')}
             className={`w-full flex items-center justify-between px-3 py-2 text-sm border rounded-lg hover:bg-white ${
@@ -81,11 +98,21 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* TIME PERIOD */}
         <div className="relative">
-          <label className="block text-xs font-medium text-gray-600 mb-1">TIME PERIOD</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-xs font-medium text-gray-600">TIME PERIOD</label>
+            {isFilterActive('timePeriod') && (
+              <button
+                onClick={() => clearFilter('timePeriod')}
+                className="text-xs text-blue-600 hover:text-blue-800"
+              >
+                Clear
+              </button>
+            )}
+          </div>
           <button
             onClick={() => setOpenDropdown(openDropdown === 'timePeriod' ? null : 'timePeriod')}
             className={`w-full flex items-center justify-between px-3 py-2 text-sm border rounded-lg hover:bg-white ${
@@ -112,7 +139,17 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
 
         {/* SORT BY */}
         <div className="relative">
-          <label className="block text-xs font-medium text-gray-600 mb-1">SORT BY</label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="block text-xs font-medium text-gray-600">SORT BY</label>
+            {isFilterActive('sortBy') && (
+              <button
+                onClick={() => clearFilter('sortBy')}
+                className="text-xs text-blue-600 hover:text-blue-800"
+              >
+                Clear
+              </button>
+            )}
+          </div>
           <button
             onClick={() => setOpenDropdown(openDropdown === 'sortBy' ? null : 'sortBy')}
             className={`w-full flex items-center justify-between px-3 py-2 text-sm border rounded-lg hover:bg-white ${

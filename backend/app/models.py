@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class PollCreate(BaseModel):
     title: str
@@ -25,3 +25,11 @@ class Poll(BaseModel):
     options: List[str]
     votes: List[int]
     likes: int
+
+class SearchQuery(BaseModel):
+    query: str
+
+class FilterQuery(BaseModel):
+    view: Optional[str] = "All Polls"
+    time_period: Optional[str] = "All Time"
+    sort_by: Optional[str] = "Newest First"

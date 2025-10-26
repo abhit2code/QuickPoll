@@ -12,14 +12,37 @@ export default function Home() {
   const [polls, setPolls] = useState<Poll[]>([])
   const [showPollForm, setShowPollForm] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [filters, setFilters] = useState({
+    view: 'All Polls',
+    timePeriod: 'All Time',
+    sortBy: 'Newest First'
+  })
 
   const fetchPolls = async () => {
     try {
-      const data = await api.getPolls()
+      const data = await api.getPolls({
+        search: searchQuery || undefined,
+        view: filters.view,
+        time_period: filters.timePeriod,
+        sort_by: filters.sortBy
+      })
       setPolls(data)
     } catch (error) {
       console.error('Error fetching polls:', error)
     }
+  }
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+  }
+
+  const handleFilterChange = (newFilters: any) => {
+    setFilters({
+      view: newFilters.view || 'All Polls',
+      timePeriod: newFilters.timePeriod || 'All Time',
+      sortBy: newFilters.sortBy || 'Newest First'
+    })
   }
 
   const { connected } = useWebSocket((data) => {
@@ -61,13 +84,14 @@ export default function Home() {
 
   useEffect(() => {
     fetchPolls()
-  }, [])
+  }, [searchQuery, filters])
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header 
         onNewPoll={() => setShowPollForm(true)}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        onSearch={handleSearch}
         connected={connected}
       />
       
@@ -108,7 +132,7 @@ export default function Home() {
             
             {polls.length === 0 && (
               <div className="text-center py-12 text-gray-500">
-                No polls yet. Create the first one!
+                {searchQuery ? `No polls found for "${searchQuery}"` : 'No polls yet. Create the first one!'}
               </div>
             )}
           </div>
@@ -116,7 +140,7 @@ export default function Home() {
 
         {/* Sidebar */}
         <div className="hidden lg:block lg:w-[30%] xl:w-[30%]">
-          <Sidebar />
+          <Sidebar onFilterChange={handleFilterChange} />
         </div>
       </div>
 
@@ -124,7 +148,8 @@ export default function Home() {
       <div className="lg:hidden">
         <Sidebar 
           isOpen={sidebarOpen} 
-          onClose={() => setSidebarOpen(false)} 
+          onClose={() => setSidebarOpen(false)}
+          onFilterChange={handleFilterChange}
         />
       </div>
     </div>
