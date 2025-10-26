@@ -27,7 +27,7 @@ app.add_middleware(
 
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["https://quick-poll-six.vercel.app"],
+    allowed_hosts=["quickpoll-production.up.railway.app", "localhost"]
 )
 
 @app.on_event("startup")
