@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ChevronDown, Filter } from 'lucide-react'
 
 interface FilterSectionProps {
@@ -15,6 +15,18 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   })
 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const filterOptions = {
     view: ['All Polls', 'My Polls', 'Polls I Voted', 'Polls I Haven\'t Voted', 'Liked Polls'],
@@ -56,7 +68,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   }
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4">
+    <div className="bg-gray-50 rounded-lg p-4" ref={dropdownRef}>
       <div className="flex items-center space-x-2 mb-4">
         <Filter className="w-5 h-5 text-blue-500"/>
         <h3 className="font-semibold text-gray-900">Filters</h3>

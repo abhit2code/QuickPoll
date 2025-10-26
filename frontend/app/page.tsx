@@ -19,6 +19,8 @@ export default function Home() {
     sortBy: 'Newest First'
   })
 
+  const [sidebarRefresh, setSidebarRefresh] = useState(0)
+
   const fetchPolls = async () => {
     try {
       const data = await api.getPolls({
@@ -28,6 +30,7 @@ export default function Home() {
         sort_by: filters.sortBy
       })
       setPolls(data)
+      setSidebarRefresh(prev => prev + 1) // Trigger sidebar refresh
     } catch (error) {
       console.error('Error fetching polls:', error)
     }
@@ -140,7 +143,7 @@ export default function Home() {
 
         {/* Sidebar */}
         <div className="hidden lg:block lg:w-[30%] xl:w-[30%]">
-          <Sidebar onFilterChange={handleFilterChange} />
+          <Sidebar onFilterChange={handleFilterChange} refreshTrigger={sidebarRefresh} />
         </div>
       </div>
 
@@ -150,6 +153,7 @@ export default function Home() {
           isOpen={sidebarOpen} 
           onClose={() => setSidebarOpen(false)}
           onFilterChange={handleFilterChange}
+          refreshTrigger={sidebarRefresh}
         />
       </div>
     </div>

@@ -124,9 +124,11 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
           
           <button
             onClick={() => setShowComments(!showComments)}
-            className="flex items-center space-x-1 hover:text-gray-900"
+            className={`flex items-center space-x-1 transition-colors ${
+              showComments ? 'text-blue-600' : 'text-gray-500 hover:text-gray-900'
+            }`}
           >
-            <MessageCircle className="w-4 h-4 text-gray-500" />
+            <MessageCircle className={`w-4 h-4 ${showComments ? 'text-blue-600' : 'text-gray-500'}`} />
             <span>{poll.comments.length}</span>
           </button>
 

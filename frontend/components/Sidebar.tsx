@@ -9,9 +9,10 @@ interface SidebarProps {
   isOpen?: boolean
   onClose?: () => void
   onFilterChange?: (filters: any) => void
+  refreshTrigger?: number
 }
 
-export default function Sidebar({ isOpen = true, onClose, onFilterChange }: SidebarProps) {
+export default function Sidebar({ isOpen = true, onClose, onFilterChange, refreshTrigger }: SidebarProps) {
   const [trending, setTrending] = useState<TrendingData | null>(null)
   const [stats, setStats] = useState<StatsData | null>(null)
 
@@ -30,10 +31,10 @@ export default function Sidebar({ isOpen = true, onClose, onFilterChange }: Side
     }
 
     fetchData()
-    // Refresh data every 30 seconds
-    const interval = setInterval(fetchData, 30000)
+    // Refresh data every 10 seconds for more responsive updates
+    const interval = setInterval(fetchData, 10000)
     return () => clearInterval(interval)
-  }, [])
+  }, [refreshTrigger])
 
   return (
     <>
