@@ -1,6 +1,11 @@
 import { config } from './config'
 
-const API_BASE = config.apiUrl
+// Force HTTPS in production
+const API_BASE = typeof window !== 'undefined' && window.location.protocol === 'https:' 
+  ? config.apiUrl.replace('http://', 'https://') 
+  : config.apiUrl
+
+console.log('🔧 API_BASE final:', API_BASE)
 
 export interface Comment {
   id: number

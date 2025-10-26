@@ -1,7 +1,9 @@
 // Centralized configuration
 const getApiUrl = () => {
   const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-  return url
+  const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url
+  console.log('🔧 getApiUrl:', { original: url, cleaned: cleanUrl })
+  return cleanUrl
 }
 
 export const config = {
