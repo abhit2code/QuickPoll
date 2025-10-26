@@ -40,7 +40,7 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
     try {
       const newLikedState = !isLiked
       await api.likePoll(poll.id, newLikedState)
-      
+
       // Update localStorage
       const likedPolls = JSON.parse(localStorage.getItem('likedPolls') || '[]')
       if (newLikedState) {
@@ -51,7 +51,7 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
       }
       localStorage.setItem('likedPolls', JSON.stringify(likedPolls))
       setIsLiked(newLikedState)
-      
+
       onUpdate()
     } catch (error) {
       console.error('Error liking poll:', error)
@@ -59,11 +59,11 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
   }
 
   const HeartIcon = ({ filled }: { filled: boolean }) => (
-    <svg 
+    <svg
       className={`w-4 h-4 ${filled ? 'text-red-500 fill-red-500' : 'text-red-500'}`}
       fill={filled ? 'currentColor' : 'none'}
-      stroke="currentColor" 
-      strokeWidth="2" 
+      stroke="currentColor"
+      strokeWidth="2"
       viewBox="0 0 24 24"
     >
       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
@@ -73,12 +73,12 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
       <h3 className="font-medium mb-3 text-gray-900 line-clamp-2">{poll.title}</h3>
-      
+
       <div className="space-y-2 mb-4">
         {poll.options.map((option, index) => {
           const votes = poll.votes[index] || 0
           const percentage = totalVotes > 0 ? (votes / totalVotes) * 100 : 0
-          
+
           return (
             <div key={index} className="space-y-1">
               <div className="flex items-center space-x-2">
@@ -91,7 +91,7 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
                   disabled={hasVoted}
                   className="text-blue-600 w-4 h-4"
                 />
-                <label 
+                <label
                   htmlFor={`${poll.id}-${index}`}
                   className="flex-1 cursor-pointer text-sm text-gray-700"
                 >
@@ -101,10 +101,10 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
                   {percentage.toFixed(0)}%
                 </span>
               </div>
-              
+
               <div className="ml-6">
                 <div className="w-full bg-gray-200 rounded-full h-1.5">
-                  <div 
+                  <div
                     className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
                     style={{ width: `${percentage}%` }}
                   />
@@ -121,26 +121,24 @@ export default function PollCard({ poll, onUpdate }: PollCardProps) {
             <Users className="w-4 h-4 text-blue-500" />
             <span>{totalVotes}</span>
           </div>
-          
+
           <button
             onClick={() => setShowComments(!showComments)}
-            className={`flex items-center space-x-1 transition-colors ${
-              showComments ? 'text-blue-600' : 'text-gray-500 hover:text-gray-900'
-            }`}
+            className={`flex items-center space-x-1 transition-colors ${showComments ? 'text-blue-600' : 'text-gray-500 hover:text-gray-900'
+              }`}
           >
-<MessageCircle
-  className={`w-4 h-4 ${showComments ? 'text-blue-600' : 'text-gray-500'}`}
-  fill={showComments ? 'currentColor' : 'none'}
-  stroke="currentColor"
-/>
+            <MessageCircle
+              className={`w-4 h-4 ${showComments ? 'text-blue-600' : 'text-gray-500'}`}
+              fill={showComments ? 'currentColor' : 'none'}
+              stroke="currentColor"
+            />
             <span>{poll.comments.length}</span>
           </button>
 
           <button
             onClick={handleLike}
-            className={`flex items-center space-x-1 transition-colors ${
-              isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
-            }`}
+            className={`flex items-center space-x-1 transition-colors ${isLiked ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
+              }`}
           >
             <HeartIcon filled={isLiked} />
             <span>{poll.likes}</span>
