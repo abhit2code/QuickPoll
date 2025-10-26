@@ -12,16 +12,13 @@ app = FastAPI(title="QuickPoll API", version="1.0.0")
 
 app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
-# Production-ready CORS settings
-allowed_origins = [
-    "https://*.vercel.app",  # Vercel deployments
-    "http://localhost:3000",  # Local development
-    "http://localhost:8000",  # Local backend
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For demo - restrict in production
+    allow_origins=[
+        "https://quick-poll-six.vercel.app",
+        "http://localhost:3000",
+        "http://localhost:8000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -29,7 +26,11 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup():
-    await init_db()
+    try:
+        await init_db()
+    except Exception as e:
+        print(f"Database initialization failed: {e}")
+        # Continue startup anyway
 
 @app.get("/")
 async def root():
