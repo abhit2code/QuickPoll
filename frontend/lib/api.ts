@@ -59,6 +59,7 @@ export const api = {
     if (params?.sort_by) searchParams.append('sort_by', params.sort_by)
     
     const url = `${API_BASE}/polls${searchParams.toString() ? '?' + searchParams.toString() : ''}`
+    console.log('🔧 api.getPolls URL:', url)
     const response = await fetch(url)
     return response.json()
   },
