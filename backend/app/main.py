@@ -25,10 +25,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(
-    TrustedHostMiddleware,
-    allowed_hosts=["quickpoll-production.up.railway.app", "localhost"]
-)
+# app.add_middleware(
+#     TrustedHostMiddleware,
+#     allowed_hosts=["quickpoll-production.up.railway.app", "localhost"]
+# )
 
 @app.on_event("startup")
 async def startup():
