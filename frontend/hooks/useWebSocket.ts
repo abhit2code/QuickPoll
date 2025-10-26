@@ -36,8 +36,9 @@ export const useWebSocket = (onMessage: (data: WebSocketMessage) => void) => {
     // Create WebSocket only if it doesn't exist or is closed
     if (!ws || ws.readyState === WebSocket.CLOSED) {
       console.log('🟢 Creating new WebSocket connection')
-      // WebSocket always runs in browser, so use localhost
-      const wsUrl = 'ws://localhost:8000/ws'
+      // Use environment variable for WebSocket URL
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const wsUrl = apiUrl.replace('http', 'ws') + '/ws'
       ws = new WebSocket(wsUrl)
       
       ws.onopen = () => {

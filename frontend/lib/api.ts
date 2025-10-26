@@ -1,6 +1,4 @@
-const API_BASE = typeof window !== 'undefined' 
-  ? 'http://localhost:8000'  // Browser (client-side)
-  : 'http://backend:8000'    // Server-side in Docker
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
 export interface Comment {
   id: number
