@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-# from starlette.middleware.proxy_headers import ProxyHeadersMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 
 from app.database import init_db
@@ -23,6 +23,11 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=["https://quick-poll-six.vercel.app"],
 )
 
 @app.on_event("startup")
