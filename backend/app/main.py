@@ -2,7 +2,8 @@ import os
 from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.proxy_headers import ProxyHeadersMiddleware
+# from starlette.middleware.proxy_headers import ProxyHeadersMiddleware
+
 
 from app.database import init_db
 from app.routers import polls, websocket
@@ -10,7 +11,7 @@ from app.websocket import manager
 
 app = FastAPI(title="QuickPoll API", version="1.0.0")
 
-app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
+# app.add_middleware(ProxyHeadersMiddleware, trusted_hosts="*")
 
 app.add_middleware(
     CORSMiddleware,
