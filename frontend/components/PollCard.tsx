@@ -1,4 +1,8 @@
+'use client'
+
+import { useState } from 'react'
 import { Poll, api } from '@/lib/api'
+import { Users, MessageCircle, Heart } from 'lucide-react'
 import Comments from './Comments'
 
 interface PollCardProps {
@@ -7,79 +11,116 @@ interface PollCardProps {
 }
 
 export default function PollCard({ poll, onUpdate }: PollCardProps) {
+  const [selectedOption, setSelectedOption] = useState<number | null>(null)
+  const [hasVoted, setHasVoted] = useState(false)
+  const [showComments, setShowComments] = useState(false)
+
   const totalVotes = poll.votes.reduce((sum, votes) => sum + votes, 0)
 
-  const vote = async (optionIndex: number) => {
+  const handleVote = async () => {
+    if (selectedOption === null || hasVoted) return
+
     try {
-      await api.vote(poll.id, optionIndex)
+      await api.vote(poll.id, selectedOption)
+      setHasVoted(true)
+      onUpdate()
     } catch (error) {
       console.error('Error voting:', error)
-      setTimeout(onUpdate, 100)
     }
   }
 
-  const likePoll = async () => {
+  const handleLike = async () => {
     try {
       await api.likePoll(poll.id)
+      onUpdate()
     } catch (error) {
       console.error('Error liking poll:', error)
-      setTimeout(onUpdate, 100)
     }
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="text-lg font-semibold">{poll.title}</h3>
-        <button
-          onClick={likePoll}
-          className="flex items-center gap-1 px-3 py-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
-        >
-          ❤️ {poll.likes}
-        </button>
-      </div>
+    <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+      <h3 className="font-medium mb-3 text-gray-900 line-clamp-2">{poll.title}</h3>
       
-      <div className="space-y-3">
+      <div className="space-y-2 mb-4">
         {poll.options.map((option, index) => {
-          const percentage = totalVotes > 0 ? (poll.votes[index] / totalVotes) * 100 : 0
+          const votes = poll.votes[index] || 0
+          const percentage = totalVotes > 0 ? (votes / totalVotes) * 100 : 0
           
           return (
-            <div key={index} className="space-y-2">
-              <div className="flex justify-between">
-                <span>{option}</span>
-                <span className="text-sm text-gray-600">
-                  {poll.votes[index]} votes ({percentage.toFixed(1)}%)
+            <div key={index} className="space-y-1">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id={`${poll.id}-${index}`}
+                  name={`poll-${poll.id}`}
+                  value={index}
+                  onChange={() => setSelectedOption(index)}
+                  disabled={hasVoted}
+                  className="text-blue-600 w-4 h-4"
+                />
+                <label 
+                  htmlFor={`${poll.id}-${index}`}
+                  className="flex-1 cursor-pointer text-sm text-gray-700"
+                >
+                  {option}
+                </label>
+                <span className="text-xs text-gray-500">
+                  {percentage.toFixed(0)}%
                 </span>
               </div>
               
-              <div className="flex items-center gap-2">
-                <div className="flex-1 bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              <div className="ml-6">
+                <div className="w-full bg-gray-200 rounded-full h-1.5">
+                  <div 
+                    className="bg-blue-500 h-1.5 rounded-full transition-all duration-300"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
-                <button
-                  onClick={() => vote(index)}
-                  className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 text-sm"
-                >
-                  Vote
-                </button>
               </div>
             </div>
           )
         })}
       </div>
-      
-      <div className="mt-4 text-sm text-gray-500">
-        Total votes: {totalVotes}
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4 text-sm text-gray-600">
+          <div className="flex items-center space-x-1">
+            <Users className="w-4 h-4 text-blue-500" />
+            <span>{totalVotes}</span>
+          </div>
+          
+          <button
+            onClick={() => setShowComments(!showComments)}
+            className="flex items-center space-x-1 hover:text-gray-900"
+          >
+            <MessageCircle className="w-4 h-4 text-gray-500" />
+            <span>{poll.comments.length}</span>
+          </button>
+
+          <button
+            onClick={handleLike}
+            className="flex items-center space-x-1 hover:text-red-600"
+          >
+            <Heart className="w-4 h-4 text-red-500" />
+            <span>{poll.likes}</span>
+          </button>
+        </div>
+
+        <button
+          onClick={handleVote}
+          disabled={selectedOption === null || hasVoted}
+          className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+        >
+          {hasVoted ? 'Voted' : 'Vote'}
+        </button>
       </div>
 
-      <Comments 
-        pollId={poll.id} 
-        comments={poll.comments} 
-        onUpdate={onUpdate} 
-      />
+      {showComments && (
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <Comments pollId={poll.id} comments={poll.comments} onUpdate={onUpdate} />
+        </div>
+      )}
     </div>
   )
 }
