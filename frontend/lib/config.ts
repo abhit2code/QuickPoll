@@ -1,8 +1,13 @@
 // Centralized configuration
+const getApiUrl = () => {
+  const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+  return url
+}
+
 export const config = {
-  apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
+  apiUrl: getApiUrl(),
   wsUrl: (() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    const apiUrl = getApiUrl()
     return apiUrl.replace('http', 'ws') + '/ws'
   })()
 }
