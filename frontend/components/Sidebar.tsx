@@ -32,8 +32,8 @@ export default function Sidebar({ isOpen = true, onClose, onFilterChange, refres
 
     fetchData()
     // Refresh data every 10 seconds for more responsive updates
-    const interval = setInterval(fetchData, 10000)
-    return () => clearInterval(interval)
+    // const interval = setInterval(fetchData, 10000)
+    // return () => clearInterval(interval)
   }, [refreshTrigger])
 
   return (
