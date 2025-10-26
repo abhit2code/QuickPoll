@@ -1,7 +1,7 @@
 import { config } from './config'
 
 // Force HTTPS in production - aggressive fix
-const API_BASE = config.apiUrl;
+const API_BASE = config.apiUrl.replace('http://', 'https://');
 
 export interface Comment {
   id: number
