@@ -4,6 +4,8 @@ A real-time polling platform where users can create polls, vote, like polls, and
 
 ## Live Demo
 
+https://quick-poll-six.vercel.app/
+
 - **Frontend**: Hosted on Vercel
 - **Backend**: Hosted on Render
 - **Database**: PostgreSQL on Neon
