@@ -68,7 +68,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   }
 
   return (
-    <div className="bg-gray-50 rounded-lg p-4" ref={dropdownRef}>
+    <div className="bg-gray-50 rounded-lg p-4 mt-5" ref={dropdownRef}>
       <div className="flex items-center space-x-2 mb-4">
         <Filter className="w-5 h-5 text-blue-500"/>
         <h3 className="font-semibold text-gray-900">Filters</h3>

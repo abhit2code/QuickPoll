@@ -48,8 +48,8 @@ export default function Sidebar({ isOpen = true, onClose, onFilterChange, refres
       
       {/* Sidebar */}
       <aside className={`
-        fixed top-16 right-0
-        w-80 lg:w-[calc(30%-22px)] h-[calc(100vh-4rem)] lg:h-[calc(100vh-8rem)]
+        fixed top-28 lg:top-16 right-0
+        w-80 lg:w-[calc(30%-22px)] h-[calc(100vh-4rem)] lg:h-[calc(100vh-7.0rem)]
         bg-white border-l lg:border border-gray-200
         transform transition-transform duration-300 ease-in-out z-40 lg:z-auto
         ${isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
@@ -57,7 +57,7 @@ export default function Sidebar({ isOpen = true, onClose, onFilterChange, refres
         lg:mr-[26px] lg:mt-[26px] lg:mb-[26px] lg:rounded-lg
       `}>
         <div className="h-full w-full lg:max-w-sm lg:mx-auto flex flex-col">
-          <div className="flex-1 overflow-y-auto p-4 lg:p-6 space-y-4 lg:space-y-6">
+          <div className="flex-1 overflow-y-auto p-4 lg:py-6 space-y-4 lg:space-y-6">
             {/* Filter Section */}
             <FilterSection onFilterChange={onFilterChange} />
 
