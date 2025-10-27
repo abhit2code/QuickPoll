@@ -1,30 +1,72 @@
 # QuickPoll - Real-Time Opinion Polling Platform
 
-A real-time polling platform where users can create polls, vote, like polls, and see live updates as other users interact.
+A real-time polling platform where users can create polls, vote, like polls, and see live updates as other users interact. Built as part of a coding challenge to demonstrate full-stack development skills with modern web technologies.
 
-## Tech Stack
+## Live Demo
 
-- **Frontend**: Next.js 14 + TypeScript + TailwindCSS
-- **Backend**: FastAPI (Python 3.11) + WebSockets
-- **Database**: PostgreSQL
-- **Real-time**: WebSocket connections for live updates
+- **Frontend**: Hosted on Vercel
+- **Backend**: Hosted on Render
+- **Database**: PostgreSQL on Neon
 
-## Features
+## System Design and Architecture
 
-- Create polls with multiple options
-- Real-time voting with live result updates
-- Like polls functionality
-- Responsive UI with progress bars
-- WebSocket-based real-time updates
-- PostgreSQL data persistence
+### Overview
 
-## Quick Start
+QuickPoll follows a modern three-tier architecture designed for real-time interactions and scalability on free-tier hosting services.
 
-### Using Docker Compose (Recommended)
+### Architecture Components
+
+**Frontend Layer (Next.js 14 + TypeScript)**
+- Server-side rendering for optimal performance
+- Real-time WebSocket connections for live updates
+- Responsive UI built with TailwindCSS and shadcn/ui components
+- State management for real-time poll data synchronization
+
+**Backend Layer (FastAPI + Python 3.11)**
+- Asynchronous REST API for poll management
+- WebSocket server for real-time communication
+- Connection pooling for database efficiency
+- CORS configuration for cross-origin requests
+
+**Data Layer (PostgreSQL)**
+- Normalized database schema for polls, options, votes, and likes
+- Indexed queries for optimal performance
+- Connection pooling to handle concurrent users
+
+### Real-Time Communication Flow
+
+1. **Poll Creation**: Client sends POST request → Backend creates poll → WebSocket broadcasts to all connected clients
+2. **Voting**: Client submits vote → Backend updates database → WebSocket sends live vote counts to all clients
+3. **Likes**: Client likes poll → Backend increments counter → WebSocket updates like count across all sessions
+
+### Database Schema
+
+```sql
+polls: id, title, options (JSONB), votes (JSONB), likes, created_at
+comments: id, poll_id, text, likes, created_at
+```
+
+### WebSocket Event Types
+
+- `poll_created`: New poll broadcast
+- `vote_updated`: Live vote count updates
+- `poll_liked`: Like count updates
+- `connection_count`: Active user tracking
+
+## How to Run the Project Locally
+
+### Prerequisites
+
+- Node.js 18+ and npm
+- Python 3.11+
+- PostgreSQL database
+
+### Method 1: Docker Compose (Recommended)
 
 ```bash
-# Clone and navigate to project
-cd quickpoll
+# Clone the repository
+git clone <repository-url>
+cd QuickPoll
 
 # Start all services
 docker-compose up --build
@@ -34,20 +76,31 @@ docker-compose up --build
 # Backend API: http://localhost:8000
 ```
 
-### Manual Setup
+### Method 2: Manual Setup
+
+#### Database Setup
+
+```bash
+# Install PostgreSQL and create database
+createdb quickpoll
+
+# Or use Docker for PostgreSQL
+docker run --name quickpoll-db -e POSTGRES_PASSWORD=password -e POSTGRES_DB=quickpoll -p 5432:5432 -d postgres:15
+```
 
 #### Backend Setup
 
 ```bash
 cd backend
 
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
 # Install dependencies
 pip install -r requirements.txt
 
-# Set up PostgreSQL database
-# Create database 'quickpoll' with user 'user' and password 'password'
-
-# Set environment variable
+# Set environment variables
 export DATABASE_URL="postgresql://user:password@localhost:5432/quickpoll"
 
 # Run the server
@@ -62,81 +115,126 @@ cd frontend
 # Install dependencies
 npm install
 
+# Set environment variables
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
+
 # Run development server
 npm run dev
 
 # Access at http://localhost:3000
 ```
 
-## API Endpoints
-
-- `POST /polls` - Create a new poll
-- `GET /polls` - Get all polls
-- `POST /vote` - Submit a vote
-- `POST /like` - Like a poll
-- `WS /ws` - WebSocket connection for real-time updates
-
-## Deployment
-
-### Free Tier Hosting Options
-
-**Backend (FastAPI)**:
-- Railway.app
-- Render.com
-- Fly.io
-
-**Frontend (Next.js)**:
-- Vercel (recommended)
-- Netlify
-- Railway.app
-
-**Database**:
-- Neon.tech (PostgreSQL)
-- Supabase
-- Railway.app PostgreSQL
-
 ### Environment Variables
 
-Backend:
+**Backend (.env)**
 ```
-DATABASE_URL=postgresql://user:password@host:port/database
+DATABASE_URL=postgresql://user:password@localhost:5432/quickpoll
+CORS_ORIGINS=http://localhost:3000,https://your-frontend-domain.vercel.app
 ```
 
-Frontend:
+**Frontend (.env.local)**
 ```
-NEXT_PUBLIC_API_URL=https://your-backend-url.com
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
+
+## Research and Resources Used
+
+### Technology Research
+
+**Real-Time Polling Platforms Analyzed:**
+- Mentimeter: Studied their real-time voting interface and WebSocket implementation patterns
+- Poll Everywhere: Analyzed their responsive design and user interaction flows
+- Kahoot: Examined their real-time synchronization and user engagement features
+- Slido: Researched their poll creation UX and live result visualization
+
+**Open Source Polling Solutions Explored:**
+- OpenSlides: Analyzed their PostgreSQL schema design for voting systems
+- LimeSurvey: Studied their poll option management and data structures
+- Framadate: Examined their minimalist UI approach for poll creation
+
+### APIs and Libraries Used
+
+**Frontend Dependencies:**
+- Next.js 14: React framework with SSR capabilities
+- TypeScript: Type safety and developer experience
+- TailwindCSS: Utility-first CSS framework
+- shadcn/ui: Accessible component library built on Radix UI
+- Socket.io-client: WebSocket client for real-time communication
+
+**Backend Dependencies:**
+- FastAPI: Modern Python web framework with automatic API documentation
+- asyncpg: Asynchronous PostgreSQL driver for Python
+- python-socketio: WebSocket server implementation
+- uvicorn: ASGI server for production deployment
+- python-multipart: Form data parsing for file uploads
+
+**Database:**
+- PostgreSQL: Chosen for ACID compliance and JSON support for flexible poll options
+- Connection pooling: Implemented for handling concurrent connections on free-tier hosting
+
+### Hosting Platform Research
+
+**Free-Tier Hosting Solutions Evaluated:**
+- Vercel: Selected for frontend due to excellent Next.js integration and global CDN
+- Render: Chosen for backend due to automatic deployments and PostgreSQL support
+- Neon: Selected for database due to generous free tier and serverless PostgreSQL
+- Railway: Evaluated as alternative for full-stack deployment
+- Fly.io: Considered for backend hosting with global edge deployment
+
+### Performance Optimizations
+
+- Implemented connection pooling to handle database connections efficiently
+- Used WebSocket connection management to prevent memory leaks
+- Optimized database queries with proper indexing
+- Implemented client-side caching for poll data
+- Used Next.js SSR for improved initial page load times
+
+## API Documentation
+
+### REST Endpoints
+
+- `GET /polls` - Retrieve all polls with vote counts
+- `POST /polls` - Create a new poll
+- `POST /vote` - Submit a vote for a poll option
+- `POST /like` - Like a poll
+- `GET /health` - Health check endpoint
+
+### WebSocket Events
+
+- `connect` - Client connection established
+- `disconnect` - Client disconnection
+- `poll_created` - New poll broadcast
+- `vote_updated` - Live vote count updates
+- `poll_liked` - Like count updates
 
 ## Project Structure
 
 ```
-quickpoll/
+QuickPoll/
 ├── backend/
-│   ├── main.py              # FastAPI application
+│   ├── main.py              # FastAPI application and WebSocket handlers
+│   ├── database.py          # Database connection and models
 │   ├── requirements.txt     # Python dependencies
-│   └── Dockerfile          # Backend container
+│   └── Dockerfile          # Backend container configuration
 ├── frontend/
 │   ├── app/
 │   │   ├── page.tsx        # Main polling interface
-│   │   ├── layout.tsx      # App layout
-│   │   └── globals.css     # Global styles
-│   ├── package.json        # Node dependencies
-│   └── Dockerfile          # Frontend container
-├── docker-compose.yml      # Local development setup
-└── README.md              # This file
+│   │   ├── layout.tsx      # Application layout
+│   │   ├── globals.css     # Global styles and Tailwind imports
+│   │   └── components/     # Reusable UI components
+│   ├── package.json        # Node.js dependencies
+│   ├── tailwind.config.js  # Tailwind CSS configuration
+│   ├── next.config.js      # Next.js configuration
+│   └── Dockerfile          # Frontend container configuration
+├── docker-compose.yml      # Local development environment
+└── README.md              # Project documentation
 ```
 
-## Real-time Features
+## Deployment Configuration
 
-The application uses WebSocket connections to provide real-time updates:
+The application is configured for deployment on free-tier services:
 
-- **New Poll Creation**: Instantly appears for all users
-- **Vote Updates**: Live vote counts and percentages
-- **Like Updates**: Real-time like counters
-
-## Performance Considerations
-
-- Minimal database queries with efficient indexing
-- WebSocket connection management for scalability
-- Optimized frontend with React state management
-- Responsive design for mobile and desktop
+- **Frontend**: Deployed on Vercel with automatic deployments from Git
+- **Backend**: Deployed on Render with health checks
+- **Database**: PostgreSQL hosted on Neon with connection pooling
+- **Environment**: Production environment variables configured for cross-origin requests

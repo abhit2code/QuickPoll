@@ -28,7 +28,7 @@ export const useWebSocket = (onMessage: (data: WebSocketMessage) => void) => {
 
   useEffect(() => {
     componentCount++
-    console.log(`🔵 Component mounted. Total: ${componentCount}`)
+    console.log(`Component mounted. Total: ${componentCount}`)
 
     // Add this component's handler
     const handler = (data: WebSocketMessage) => handlerRef.current(data)
@@ -36,46 +36,46 @@ export const useWebSocket = (onMessage: (data: WebSocketMessage) => void) => {
 
     // Create WebSocket only if it doesn't exist or is closed
     if (!ws || ws.readyState === WebSocket.CLOSED) {
-      console.log('🟢 Creating new WebSocket connection')
+      console.log('Creating new WebSocket connection')
       const wsUrl = config.wsUrl
-      console.log('🔗 WebSocket URL:', wsUrl)
+      console.log('WebSocket URL:', wsUrl)
       ws = new WebSocket(wsUrl)
       
       ws.onopen = () => {
-        console.log('✅ WebSocket opened')
+        console.log('WebSocket opened')
         isConnected = true
         setConnected(true)
       }
       
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data)
-        console.log('📨 WebSocket message:', data)
+        console.log('WebSocket message:', data)
         // Send to all handlers
         messageHandlers.forEach(h => h(data))
       }
       
       ws.onclose = (event) => {
-        console.log('❌ WebSocket closed:', event.code)
+        console.log('WebSocket closed:', event.code)
         isConnected = false
         setConnected(false)
         ws = null
       }
       
       ws.onerror = (error) => {
-        console.error('🔴 WebSocket error:', error)
+        console.error('WebSocket error:', error)
       }
     } else if (ws.readyState === WebSocket.OPEN) {
-      console.log('♻️ Using existing open WebSocket')
+      console.log('Using existing open WebSocket')
       setConnected(true)
     } else {
-      console.log('⏳ WebSocket connecting...')
+      console.log('WebSocket connecting...')
       setConnected(false)
     }
 
     // Cleanup when component unmounts
     return () => {
       componentCount--
-      console.log(`🔴 Component unmounted. Remaining: ${componentCount}`)
+      console.log(`Component unmounted. Remaining: ${componentCount}`)
       
       // Remove this component's handler
       const index = messageHandlers.indexOf(handler)
@@ -88,7 +88,7 @@ export const useWebSocket = (onMessage: (data: WebSocketMessage) => void) => {
         // Add small delay to handle React StrictMode
         setTimeout(() => {
           if (componentCount === 0 && ws) {
-            console.log('🛑 Closing WebSocket - truly no more components')
+            console.log('Closing WebSocket - truly no more components')
             ws.close()
           }
         }, 100)
