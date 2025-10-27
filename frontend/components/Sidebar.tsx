@@ -109,10 +109,6 @@ export default function Sidebar({ isOpen = true, onClose, onFilterChange, refres
                       <span className="font-medium text-text-secondary">{stats.total_polls}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-text-muted">Active:</span>
-                      <span className="font-medium text-text-secondary">{stats.active_polls}</span>
-                    </div>
-                    <div className="flex justify-between">
                       <span className="text-text-muted">Total Votes:</span>
                       <span className="font-medium text-text-secondary">{stats.total_votes}</span>
                     </div>
