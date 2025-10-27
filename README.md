@@ -5,6 +5,7 @@ A real-time polling platform where users can create polls, vote, like polls, and
 ## Live Demo
 
 Product: https://quick-poll-six.vercel.app/
+
 Video: https://www.loom.com/share/fd6861da488445328356a3d46ad3482a
 
 ## System Design and Architecture
