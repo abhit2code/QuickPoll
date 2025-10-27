@@ -82,7 +82,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
             {isFilterActive('timePeriod') && (
               <button
                 onClick={() => clearFilter('timePeriod')}
-                className="text-xs text-glass-accent hover:text-text-primary transition-colors"
+                className="text-xs text-slate-300 hover:text-white transition-colors"
               >
                 Clear
               </button>
@@ -119,7 +119,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
             {isFilterActive('sortBy') && (
               <button
                 onClick={() => clearFilter('sortBy')}
-                className="text-xs text-glass-accent hover:text-text-primary transition-colors"
+                className="text-xs text-slate-300 hover:text-white transition-colors"
               >
                 Clear
               </button>
