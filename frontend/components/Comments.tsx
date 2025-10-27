@@ -65,8 +65,8 @@ export default function Comments({ pollId, comments, onUpdate }: CommentsProps) 
   )
 
   return (
-    <div className="mt-4 border-t pt-4">
-      <h4 className="font-semibold mb-3">Comments ({comments.length})</h4>
+    <div className="mt-4 border-t border-glass-border pt-4">
+      <h4 className="font-semibold mb-3 text-text-primary text-glow">Comments ({comments.length})</h4>
       
       {/* Add Comment */}
       <div className="flex gap-2 mb-4">
@@ -75,12 +75,12 @@ export default function Comments({ pollId, comments, onUpdate }: CommentsProps) 
           placeholder="Add a comment..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className="flex-1 p-2 border rounded-md text-sm"
+          className="flex-1 p-2 glass-card rounded-md text-sm text-text-primary placeholder-text-muted focus:border-glass-accent focus:ring-1 focus:ring-glass-accent"
           onKeyPress={(e) => e.key === 'Enter' && addComment()}
         />
         <button
           onClick={addComment}
-          className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+          className="px-3 py-2 glass-button rounded-md hover:bg-glass-button-hover text-sm transition-colors"
         >
           Post
         </button>
@@ -89,16 +89,16 @@ export default function Comments({ pollId, comments, onUpdate }: CommentsProps) 
       {/* Comments List */}
       <div className="space-y-3 max-h-60 overflow-y-auto">
         {comments.map((comment) => (
-          <div key={comment.id} className="bg-gray-50 p-3 rounded-md">
-            <p className="text-sm mb-2">{comment.text}</p>
+          <div key={comment.id} className="glass-card p-3 rounded-md">
+            <p className="text-sm mb-2 text-text-secondary">{comment.text}</p>
             <div className="flex justify-between items-center">
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-text-muted">
                 {new Date(comment.created_at).toLocaleString()}
               </span>
               <button
                 onClick={() => likeComment(comment.id)}
                 className={`flex items-center gap-1 text-xs transition-colors ${
-                  likedComments.includes(comment.id) ? 'text-red-500' : 'text-gray-600 hover:text-red-500'
+                  likedComments.includes(comment.id) ? 'text-red-400' : 'text-text-muted hover:text-red-400'
                 }`}
               >
                 <HeartIcon filled={likedComments.includes(comment.id)} />

@@ -45,33 +45,33 @@ export default function Header({ onNewPoll, onToggleSidebar, onSearch, connected
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header className="sticky top-0 z-50 glass-panel border-b border-glass-border">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <h1 className="text-xl font-bold text-gray-900">QuickPoll</h1>
-            <div className={`text-sm px-2 py-1 rounded flex items-center space-x-2 ${connected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-              <div className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span className="text-xs font-medium">{connectionCount + ' Online'}</span>
+            <h1 className="text-xl font-bold text-text-primary" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.4)'}}>QuickPoll</h1>
+            <div className={`text-sm px-2 py-1 rounded flex items-center space-x-2 glass-card ${connected ? 'border-green-400/30' : 'border-red-400/30'}`}>
+              <div className={`w-2 h-2 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'}`}></div>
+              <span className="text-xs font-medium text-text-secondary">{connectionCount + ' Online'}</span>
             </div>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-4 flex-1 max-w-2xl">
             <form onSubmit={handleSearchSubmit} className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search by title"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 glass-card rounded-lg text-text-primary placeholder-text-muted focus:border-glass-accent focus:ring-1 focus:ring-glass-accent"
               />
             </form>
             <button 
               onClick={onNewPoll}
-              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex items-center space-x-2 px-4 py-2 glass-button rounded-lg hover:bg-glass-button-hover transition-colors"
             >
               <Plus className="w-4 h-4" />
               <span>New Poll</span>
@@ -82,13 +82,13 @@ export default function Header({ onNewPoll, onToggleSidebar, onSearch, connected
           <div className="lg:hidden flex items-center space-x-2">
             <button 
               onClick={onToggleSidebar}
-              className="p-2 rounded-lg hover:bg-gray-100"
+              className="p-2 glass-button rounded-lg hover:bg-glass-button-hover transition-colors"
             >
               <Menu className="w-5 h-5" />
             </button>
             <button 
               onClick={onNewPoll}
-              className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="p-2 glass-button rounded-lg hover:bg-glass-button-hover transition-colors"
             >
               <Plus className="w-5 h-5" />
             </button>
@@ -98,13 +98,13 @@ export default function Header({ onNewPoll, onToggleSidebar, onSearch, connected
         {/* Mobile Search */}
         <div className="lg:hidden pb-4">
           <form onSubmit={handleSearchSubmit} className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted w-4 h-4" />
             <input
               type="text"
               placeholder="Search by title"
               value={searchQuery}
               onChange={handleSearchChange}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 glass-card rounded-lg text-text-primary placeholder-text-muted focus:border-glass-accent focus:ring-1 focus:ring-glass-accent"
             />
           </form>
         </div>

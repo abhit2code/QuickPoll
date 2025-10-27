@@ -50,7 +50,7 @@ export default function Sidebar({ isOpen = true, onClose, onFilterChange, refres
       <aside className={`
         fixed top-28 lg:top-16 right-0
         w-80 lg:w-[calc(30%-22px)] h-[calc(100vh-4rem)] lg:h-[calc(100vh-7.0rem)]
-        bg-white border-l lg:border border-gray-200
+        glass-panel border-l lg:border border-glass-border
         transform transition-transform duration-300 ease-in-out z-40 lg:z-auto
         ${isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
         overflow-y-auto lg:overflow-hidden lg:flex lg:items-center lg:justify-center
@@ -62,75 +62,75 @@ export default function Sidebar({ isOpen = true, onClose, onFilterChange, refres
             <FilterSection onFilterChange={onFilterChange} />
 
             {/* Trending Section */}
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="glass-card rounded-lg p-4">
               <div className="flex items-center space-x-2 mb-4">
-                <TrendingUp className="w-5 h-5 text-orange-500" />
-                <h3 className="font-semibold text-gray-900">Trending</h3>
+                <TrendingUp className="w-5 h-5 text-orange-400" />
+                <h3 className="font-semibold text-text-primary text-glow">Trending</h3>
               </div>
               <div className="space-y-3 text-sm">
                 {trending ? (
                   <>
                     <div>
-                      <div className="font-medium text-gray-700 mb-1">Most Voted</div>
+                      <div className="font-medium text-text-secondary mb-1">Most Voted</div>
                       {trending.most_voted.slice(0, 1).map((poll, index) => (
-                        <div key={poll.id} className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                        <div key={poll.id} className="flex items-center justify-between text-xs text-text-muted mb-1">
                           <span className="truncate flex-1 mr-2">{poll.title}</span>
-                          <span className="font-medium">{poll.total_votes}</span>
+                          <span className="font-medium text-text-secondary">{poll.total_votes}</span>
                         </div>
                       ))}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-700 mb-1">Most Liked</div>
+                      <div className="font-medium text-text-secondary mb-1">Most Liked</div>
                       {trending.most_liked.slice(0, 1).map((poll, index) => (
-                        <div key={poll.id} className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                        <div key={poll.id} className="flex items-center justify-between text-xs text-text-muted mb-1">
                           <span className="truncate flex-1 mr-2">{poll.title}</span>
-                          <span className="font-medium">{poll.likes}</span>
+                          <span className="font-medium text-text-secondary">{poll.likes}</span>
                         </div>
                       ))}
                     </div>
                   </>
                 ) : (
-                  <div className="text-gray-500 text-xs">Loading trending...</div>
+                  <div className="text-text-muted text-xs">Loading trending...</div>
                 )}
               </div>
             </div>
 
             {/* Quick Stats Section */}
-            <div className="bg-gray-50 rounded-lg p-4">
+            <div className="glass-card rounded-lg p-4">
               <div className="flex items-center space-x-2 mb-4">
-                <BarChart3 className="w-5 h-5 text-blue-500" />
-                <h3 className="font-semibold text-gray-900">Quick Stats</h3>
+                <BarChart3 className="w-5 h-5 text-glass-accent" />
+                <h3 className="font-semibold text-text-primary text-glow">Quick Stats</h3>
               </div>
               <div className="space-y-3 text-sm">
                 {stats ? (
                   <>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Total Polls:</span>
-                      <span className="font-medium">{stats.total_polls}</span>
+                      <span className="text-text-muted">Total Polls:</span>
+                      <span className="font-medium text-text-secondary">{stats.total_polls}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Active:</span>
-                      <span className="font-medium">{stats.active_polls}</span>
+                      <span className="text-text-muted">Active:</span>
+                      <span className="font-medium text-text-secondary">{stats.active_polls}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Total Votes:</span>
-                      <span className="font-medium">{stats.total_votes}</span>
+                      <span className="text-text-muted">Total Votes:</span>
+                      <span className="font-medium text-text-secondary">{stats.total_votes}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Total Likes:</span>
-                      <span className="font-medium">{stats.total_likes}</span>
+                      <span className="text-text-muted">Total Likes:</span>
+                      <span className="font-medium text-text-secondary">{stats.total_likes}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Today Polls:</span>
-                      <span className="font-medium">{stats.polls_today}</span>
+                      <span className="text-text-muted">Today Polls:</span>
+                      <span className="font-medium text-text-secondary">{stats.polls_today}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Avg Votes:</span>
-                      <span className="font-medium">{stats.avg_votes_per_poll}</span>
+                      <span className="text-text-muted">Avg Votes:</span>
+                      <span className="font-medium text-text-secondary">{stats.avg_votes_per_poll}</span>
                     </div>
                   </>
                 ) : (
-                  <div className="text-gray-500 text-xs">Loading stats...</div>
+                  <div className="text-text-muted text-xs">Loading stats...</div>
                 )}
               </div>
             </div>

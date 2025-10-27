@@ -90,7 +90,7 @@ export default function Home() {
   }, [searchQuery, filters])
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-main-gradient" style={{boxShadow: '0 0 40px rgba(0, 0, 0, 0.6)'}}>
       <Header 
         onNewPoll={() => setShowPollForm(true)}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
@@ -105,13 +105,13 @@ export default function Home() {
           {/* Poll Form Modal */}
           {showPollForm && (
             <div className="fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center p-4">
-              <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+              <div className="glass-card rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
                 <div className="p-6">
                   <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-semibold">Create New Poll</h2>
+                    <h2 className="text-lg font-semibold text-text-primary text-glow">Create New Poll</h2>
                     <button 
                       onClick={() => setShowPollForm(false)}
-                      className="text-gray-500 hover:text-gray-700"
+                      className="text-text-muted hover:text-text-primary transition-colors"
                     >
                       ✕
                     </button>
@@ -134,7 +134,7 @@ export default function Home() {
             ))}
             
             {polls.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-text-muted">
                 {searchQuery ? `No polls found for "${searchQuery}"` : 'No polls yet. Create the first one!'}
               </div>
             )}
