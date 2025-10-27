@@ -6,10 +6,6 @@ A real-time polling platform where users can create polls, vote, like polls, and
 
 https://quick-poll-six.vercel.app/
 
-- **Frontend**: Hosted on Vercel
-- **Backend**: Hosted on Render
-- **Database**: PostgreSQL on Neon
-
 ## System Design and Architecture
 
 ### Overview
@@ -236,7 +232,7 @@ QuickPoll/
 
 The application is configured for deployment on free-tier services:
 
-- **Frontend**: Deployed on Vercel with automatic deployments from Git
-- **Backend**: Deployed on Render with health checks
-- **Database**: PostgreSQL hosted on Neon with connection pooling
+- **Frontend**: Deployed on Vercel with automatic deployments from Git (https://quick-poll-six.vercel.app/)
+- **Backend**: Deployed on Render with health checks with automatic deployments from Git (https://quickpoll-hfdk.onrender.com)
+- **Database**: PostgreSQL hosted on Neon
 - **Environment**: Production environment variables configured for cross-origin requests
