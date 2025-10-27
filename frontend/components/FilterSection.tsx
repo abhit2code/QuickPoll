@@ -98,7 +98,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
             <ChevronDown className="w-4 h-4 text-text-muted" />
           </button>
           {openDropdown === 'timePeriod' && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-section-gradient border border-glass-border rounded-lg z-[50] shadow-lg max-h-48 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-1 glass-card bg-[#1a1a2e] backdrop-blur-sm border border-glass-border rounded-lg z-[9999] shadow-lg max-h-48 overflow-y-auto">
               {filterOptions.timePeriod.map((option) => (
                 <button
                   key={option}
@@ -135,7 +135,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
             <ChevronDown className="w-4 h-4 text-text-muted" />
           </button>
           {openDropdown === 'sortBy' && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-section-gradient border border-glass-border rounded-lg z-[50] shadow-lg max-h-48 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-1 glass-card bg-[#1a1a2e] backdrop-blur-sm border border-glass-border rounded-lg z-[9999] shadow-lg max-h-48 overflow-y-auto">
               {filterOptions.sortBy.map((option) => (
                 <button
                   key={option}
