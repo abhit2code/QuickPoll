@@ -50,7 +50,7 @@ export default function Header({ onNewPoll, onToggleSidebar, onSearch, connected
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <h1 className="text-xl font-bold text-text-primary" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.4)'}}>QuickPoll</h1>
+            <h1 className="text-xl font-bold text-text-primary" style={{textShadow: '0 0 8px rgba(255, 255, 255, 0.4)'}}>Quick Poll</h1>
             <div className={`text-sm px-2 py-1 rounded flex items-center space-x-2 glass-card ${connected ? 'border-green-400/30' : 'border-red-400/30'}`}>
               <div className={`w-2 h-2 rounded-full ${connected ? 'bg-green-400' : 'bg-red-400'}`}></div>
               <span className="text-xs font-medium text-text-secondary">{connectionCount + ' Online'}</span>
