@@ -68,7 +68,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
   }
 
   return (
-    <div className="glass-card rounded-lg p-4 mt-5" ref={dropdownRef}>
+    <div className="glass-card rounded-lg p-4 mt-5 relative z-[100]" ref={dropdownRef}>
       <div className="flex items-center space-x-2 mb-4">
         <Filter className="w-5 h-5 text-glass-accent"/>
         <h3 className="font-semibold text-text-primary text-glow">Filters</h3>
@@ -98,7 +98,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
             <ChevronDown className="w-4 h-4 text-text-muted" />
           </button>
           {openDropdown === 'timePeriod' && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-section-gradient border border-glass-border rounded-lg z-10 shadow-lg">
+            <div className="absolute top-full left-0 right-0 mt-1 bg-section-gradient border border-glass-border rounded-lg z-[50] shadow-lg max-h-48 overflow-y-auto">
               {filterOptions.timePeriod.map((option) => (
                 <button
                   key={option}
@@ -135,7 +135,7 @@ export default function FilterSection({ onFilterChange }: FilterSectionProps) {
             <ChevronDown className="w-4 h-4 text-text-muted" />
           </button>
           {openDropdown === 'sortBy' && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-section-gradient border border-glass-border rounded-lg z-10 shadow-lg">
+            <div className="absolute top-full left-0 right-0 mt-1 bg-section-gradient border border-glass-border rounded-lg z-[50] shadow-lg max-h-48 overflow-y-auto">
               {filterOptions.sortBy.map((option) => (
                 <button
                   key={option}
